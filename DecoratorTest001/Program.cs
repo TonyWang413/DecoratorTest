@@ -10,71 +10,67 @@ namespace DecoratorTest001
     {
         static void Main(string[] args)
         {
-            ConcreteComponent c = new ConcreteComponent();
-            ConcreteDecoratorA d1 = new ConcreteDecoratorA();
-            ConcreteDecoratorB d2 = new ConcreteDecoratorB();
+            Person xc = new Person("小菜");
+            TShirts dtx = new TShirts();
+            BigTrouser kk = new BigTrouser();
 
-            d1.SetComponent(c);
-            d2.SetComponent(d1);
-            d2.Operation();
+            dtx.Decorate(xc);
+            kk.Decorate(dtx);
+            kk.Show();
 
             Console.Read();
         }
     }
 
-    public abstract class Component
+    public class Person
     {
-        public abstract void Operation();
-    }
+        public Person() { }
 
-    public class ConcreteComponent : Component
-    {
-        public override void Operation()
+        private string name;
+        public Person(string name)
         {
-            Console.WriteLine("具體物件的操作");
+            this.name = name;
+        }
+
+        public virtual void Show()
+        {
+            Console.WriteLine($"裝扮的{name}");
         }
     }
 
-    public abstract class Decorator : Component
+    public class Finery : Person
     {
-        protected Component component;
+        protected Person component;
 
-        public void SetComponent(Component component)
+        public void Decorate(Person component)
         {
             this.component = component;
         }
 
-        public override void Operation()
+        public override void Show()
         {
             if (component != null)
             {
-                component.Operation();
+                component.Show();
             }
         }
     }
 
-    public class ConcreteDecoratorA : Decorator
+    public class TShirts : Finery
     {
-        private string addedState;
-        public override void Operation()
+        public override void Show()
         {
-            base.Operation();
-            addedState = "New State";
-            Console.WriteLine("具體裝飾物件A的操作");
+            Console.Write("大T恤 ");
+            base.Show();
         }
     }
 
-    public class ConcreteDecoratorB : Decorator
+    public class BigTrouser : Finery
     {
-        public override void Operation()
+        public override void Show()
         {
-            base.Operation();
-            AddedBehavior();
-            Console.WriteLine("具體裝飾物件B的操作");
-        }
-
-        private void AddedBehavior()
-        {
+            Console.Write("垮褲 ");
+            base.Show();
         }
     }
 }
